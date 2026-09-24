@@ -73,16 +73,19 @@ git clone https://github.com/BismarckYamato/Open-Card.git
 cd Open-Card
 ```
 
-### 2. Set Up Virtual Environment
+### 2. Set Up Virtual Environment & Dependencies
 
+**Using `uv` (Fastest & Recommended):**
+```bash
+uv venv
+source .venv/bin/activate    # On Windows: .venv\Scripts\activate
+uv pip install -r requirements.txt
+```
+
+**Or using standard `venv` & `pip`:**
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate    # On Windows: .venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```bash
 pip install -r requirements.txt
 ```
 
@@ -114,11 +117,24 @@ Navigate to **[http://localhost:8080](http://localhost:8080)**.
 
 ---
 
+## 🧪 Running Tests
+
+A comprehensive unit and integration test suite is included in `tests/test_app.py`, validating filename parsing, catalog indexing, image serving, collection operations, and the OpenCV scanning engine:
+
+```bash
+# Run all tests using Python's built-in unittest
+python -m unittest discover tests -v
+```
+
+---
+
 ## 📁 Project Structure
 
 ```text
 Open-Card/
 ├── catalog/                   # Master card images catalog (*.png, *.jpg)
+├── tests/
+│   └── test_app.py            # Unit & integration test suite
 ├── app.py                     # Flask server, OpenCV ORB matching engine & REST APIs
 ├── requirements.txt           # Python package dependencies
 ├── my_collection.json         # User personal collection database (JSON)
