@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Card Tracker & Catalog Scanner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Tesseract OCR for automatic text & stat recognition -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <header class="navbar">
+        <div class="brand">
+            <i class="fa-solid fa-id-card brand-icon"></i>
+            <div class="brand-text">
+                <h1>FOOTBALL CARD TRACKER</h1>
+                <span class="subtext">OpenCV Catalog Matcher & Collection Manager</span>
+            </div>
+        </div>
+        
+        <div class="nav-controls">
+            <button class="nav-btn btn-add-new" onclick="openUploadModal()">
+                <i class="fa-solid fa-circle-plus"></i> Can't Find Card? Upload / Snap
+            </button>
+            <button class="nav-btn" onclick="syncFolder()" title="Rescan catalog folder for new card images">
+                <i class="fa-solid fa-arrows-rotate"></i> Sync Folder
+            </button>
+            <button class="nav-btn active" id="tab-scanner-btn" onclick="switchTab('scanner')">
+                <i class="fa-solid fa-camera"></i> Live Scanner
+            </button>
+            <button class="nav-btn" id="tab-collection-btn" onclick="switchTab('collection')">
+                <i class="fa-solid fa-box-archive"></i> My Collection (<span id="my-coll-count">0</span>)
+            </button>
+            <button class="nav-btn" id="tab-catalog-btn" onclick="switchTab('catalog')">
+                <i class="fa-solid fa-book-open"></i> Full Catalog (<span id="total-catalog-count">0</span>)
+            </button>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <main class="main-container">
+        
+        <!-- SECTION 1: SCANNER TAB -->
+        <section id="scanner-view" class="view-section active">
+            <div class="scanner-layout">
+                <!-- Camera Viewport Card -->
+                <div class="camera-card glass-panel">
+                    <div class="camera-header">
+                        <div class="live-status pulse">
+                            <span class="dot"></span> LIVE CATALOG SCANNER
+                        </div>
+                        <div class="camera-select-container">
+                            <label for="camera-select"><i class="fa-solid fa-video"></i></label>
+                            <select id="camera-select" onchange="startCamera()"></select>
+                        </div>
+                    </div>
+
+                    <div class="webcam-wrapper">
+                        <video id="webcam" autoplay playsinline muted></video>
+                        <canvas id="scan-canvas" style="display: none;"></canvas>
+                        
+                        <!-- Target Scanning Frame Overlay -->
+                        <div class="scanner-roi" id="scanner-roi">
+                            <div class="roi-corner top-left"></div>
+                            <div class="roi-corner top-right"></div>
+                            <div class="roi-corner bottom-left"></div>
+                            <div class="roi-corner bottom-right"></div>
+                            <div class="laser-beam"></div>
+                            <div class="roi-label">
+                                <i class="fa-solid fa-expand"></i> PLACE CARD IN CENTER TO SEARCH CATALOG
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="camera-footer">
+                        <div class="scan-feedback" id="scan-feedback">
+                            <i class="fa-solid fa-magnifying-glass fa-spin"></i> Aligning card to center frame...
+                        </div>
+                        <div class="footer-btn-group">
+                            <button class="btn btn-secondary btn-sm" onclick="openUploadModal()">
+                                <i class="fa-solid fa-plus"></i> Can't Find Card?
+                            </button>
+                            <button class="btn btn-primary" onclick="triggerManualScan()">
+                                <i class="fa-solid fa-bolt"></i> Instant Scan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Display HUD Panel -->
+                <div class="hud-panel glass-panel" id="hud-panel">
+                    <div class="hud-header">
+                        <h2><i class="fa-solid fa-shield-halved"></i> CATALOG MATCH RESULTS</h2>
+                        <span class="match-badge" id="match-confidence">WAITING FOR CARD</span>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="hud-empty" class="hud-empty-state">
+                        <div class="scanner-icon-lg">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <p>Position any football card in front of your camera.</p>
+                        <p class="sub">OpenCV will search your Master Catalog and show the card details. Can't find your card? Click <strong>"Can't Find Card? Upload / Snap"</strong>!</p>
+                    </div>
+
+                    <!-- Recognized Match Content -->
+                    <div id="hud-content" class="hud-content-state" style="display: none;">
+                        <div class="card-display-wrapper" onclick="openCardInspector(currentMatchedCard)">
+                            <!-- Uniform Size Frame -->
+                            <div class="card-frame-uniform">
+                                <img id="match-img" src="" alt="Matched Card" class="card-img-fit">
+                                <div class="ovr-pill" id="match-ovr">85</div>
+                                <div class="type-badge" id="match-type-badge">Base</div>
+                            </div>
+                        </div>
+
+                        <div class="card-details-box">
+                            <div class="player-header">
+                                <h3 id="match-name">PLAYER NAME</h3>
+                                <span class="card-num-tag" id="match-num">#000</span>
+                            </div>
+
+                            <div class="stats-bars-container">
+                                <!-- ATTACK STAT BAR -->
+                                <div class="stat-row">
+                                    <div class="stat-label">
+                                        <span><i class="fa-solid fa-bolt text-danger"></i> ATTACK</span>
+                                        <span class="stat-value text-danger" id="match-atk-val">95</span>
+                                    </div>
+                                    <div class="stat-progress-bg">
+                                        <div class="stat-progress-bar bg-danger" id="match-atk-bar" style="width: 95%;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- DEFENSE STAT BAR -->
+                                <div class="stat-row">
+                                    <div class="stat-label">
+                                        <span><i class="fa-solid fa-shield text-info"></i> DEFENSE</span>
+                                        <span class="stat-value text-info" id="match-def-val">45</span>
+                                    </div>
+                                    <div class="stat-progress-bg">
+                                        <div class="stat-progress-bar bg-info" id="match-def-bar" style="width: 45%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ADD TO COLLECTION ACTION BAR -->
+                            <div class="hud-actions" id="hud-actions-container">
+                                <button class="btn btn-add-coll" id="hud-add-btn" onclick="addMatchedCardToCollection()">
+                                    <i class="fa-solid fa-plus-circle"></i> Add to My Collection
+                                </button>
+                                <span class="in-coll-status" id="hud-coll-status" style="display:none;">
+                                    <i class="fa-solid fa-circle-check text-success"></i> Owned (Qty: <span id="hud-qty-val">1</span>)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2: MY PERSONAL COLLECTION TAB -->
+        <section id="collection-view" class="view-section">
+            <div class="gallery-controls glass-panel">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="collection-search" placeholder="Search my collection..." oninput="filterCollection()">
+                </div>
+                <div class="filter-group">
+                    <label><i class="fa-solid fa-filter"></i> Type Filter:</label>
+                    <select id="collection-type-filter" onchange="filterCollection()">
+                        <option value="all">All Types (0)</option>
+                    </select>
+                </div>
+                <div class="collection-stats-summary">
+                    <span>Total Cards Owned: <strong id="summary-total-cards" class="text-highlight">0</strong></span>
+                </div>
+            </div>
+
+            <div class="gallery-grid" id="collection-grid">
+                <!-- User's Personal Owned Cards Rendered Here -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: FULL CATALOG TAB -->
+        <section id="catalog-view" class="view-section">
+            <div class="gallery-controls glass-panel">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="catalog-search" placeholder="Search master catalog..." oninput="filterCatalog()">
+                </div>
+                
+                <div class="filter-group">
+                    <label><i class="fa-solid fa-filter"></i> Type Filter:</label>
+                    <select id="catalog-type-filter" onchange="filterCatalog()">
+                        <option value="all">All Types (0)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Sort By:</label>
+                    <select id="catalog-sort" onchange="filterCatalog()">
+                        <option value="overall-desc">Overall Rating (High to Low)</option>
+                        <option value="attack-desc">Attack (High to Low)</option>
+                        <option value="def-desc">Defense (High to Low)</option>
+                        <option value="name-asc">Player Name (A-Z)</option>
+                        <option value="type-asc">Card Type (A-Z)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-sm" onclick="openUploadModal()">
+                    <i class="fa-solid fa-plus-circle"></i> Can't Find Card? Upload / Snap
+                </button>
+            </div>
+
+            <div class="naming-guide-banner glass-panel">
+                <i class="fa-solid fa-book-open text-highlight"></i>
+                <span>Master Catalog folder supports unlimited card types! Use <strong>Upload / Snap</strong> to add cards automatically.</span>
+            </div>
+
+            <div class="gallery-grid" id="catalog-grid">
+                <!-- Master Catalog Grid Rendered Here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CARD INSPECTOR / CLEAN DETAIL MODAL -->
+    <div class="modal-backdrop" id="inspector-modal">
+        <div class="modal-content glass-panel modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-shield-halved text-highlight"></i> Card Specifications</h3>
+                <button class="modal-close" onclick="closeCardInspector()">&times;</button>
+            </div>
+            <div class="modal-body inspector-body">
+                <div class="inspector-card-container">
+                    <div class="card-frame-uniform">
+                        <img id="inspect-img" src="" alt="Card" class="card-img-fit">
+                        <div class="ovr-pill" id="inspect-ovr">0</div>
+                        <div class="type-badge" id="inspect-type-badge">Base</div>
+                    </div>
+                </div>
+
+                <div class="inspector-details">
+                    <div class="player-header">
+                        <h2 id="inspect-name">PLAYER NAME</h2>
+                        <span class="card-num-tag" id="inspect-num">#000</span>
+                    </div>
+
+                    <div class="stats-bars-container">
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span><i class="fa-solid fa-bolt text-danger"></i> ATTACK STAT</span>
+                                <span class="stat-value text-danger" id="inspect-atk-val">0</span>
+                            </div>
+                            <div class="stat-progress-bg">
+                                <div class="stat-progress-bar bg-danger" id="inspect-atk-bar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span><i class="fa-solid fa-shield text-info"></i> DEFENSE STAT</span>
+                                <span class="stat-value text-info" id="inspect-def-val">0</span>
+                            </div>
+                            <div class="stat-progress-bg">
+                                <div class="stat-progress-bar bg-info" id="inspect-def-bar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clean Action Buttons -->
+                    <div class="inspector-actions" id="inspect-action-bar">
+                        <!-- Added dynamically -->
+                    </div>
+
+                    <!-- Expandable Full Technical Data Toggle -->
+                    <div class="specs-toggle-container">
+                        <button class="btn btn-secondary btn-sm" onclick="toggleTechnicalSpecs()">
+                            <i class="fa-solid fa-sliders"></i> <span id="specs-toggle-btn-text">View Full Card Data</span>
+                        </button>
+                    </div>
+
+                    <div class="specs-expand-panel" id="inspect-specs-panel" style="display: none;">
+                        <div class="spec-item"><span>Card Type:</span> <strong id="spec-card-type">Base</strong></div>
+                        <div class="spec-item"><span>Card Code:</span> <strong id="spec-card-code">#000</strong></div>
+                        <div class="spec-item"><span>File Name:</span> <code id="spec-filename">card.png</code></div>
+                        <div class="spec-item"><span>Resolution:</span> <strong id="spec-res">780x1080</strong></div>
+                        <div class="spec-item"><span>Collection Status:</span> <strong id="spec-status">Not Owned</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPLOAD / SNAP NEW CARD MODAL -->
+    <div class="modal-backdrop" id="upload-modal">
+        <div class="modal-content glass-panel modal-upload-wide">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-arrow-up text-highlight"></i> Add New Card to Catalog</h3>
+                <button class="modal-close" onclick="closeUploadModal()">&times;</button>
+            </div>
+            
+            <div class="upload-source-tabs">
+                <button class="source-tab active" id="tab-src-file" onclick="switchUploadSource('file')">
+                    <i class="fa-solid fa-file-image"></i> Upload Image File
+                </button>
+                <button class="source-tab" id="tab-src-camera" onclick="switchUploadSource('camera')">
+                    <i class="fa-solid fa-camera"></i> Take Photo (Webcam)
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="upload-form" onsubmit="handleCardUpload(event)">
+                    
+                    <!-- SOURCE 1: FILE PICKER -->
+                    <div id="src-file-box" class="upload-source-box">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-cloud-arrow-up"></i> Select Card Photo File</label>
+                            <input type="file" id="upload-file-input" accept="image/*" onchange="onFileSelectedForOCR(this)">
+                        </div>
+                    </div>
+
+                    <!-- SOURCE 2: WEBCAM SNAPSHOT WITH IDENTICAL SCANNER ROI OVERLAY -->
+                    <div id="src-camera-box" class="upload-source-box" style="display:none;">
+                        <div class="webcam-wrapper modal-webcam-container">
+                            <video id="modal-webcam" autoplay playsinline muted></video>
+                            <canvas id="modal-snap-canvas" style="display:none;"></canvas>
+                            
+                            <!-- IDENTICAL SCANNER TARGET FRAME OVERLAY -->
+                            <div class="scanner-roi" id="modal-scanner-roi">
+                                <div class="roi-corner top-left"></div>
+                                <div class="roi-corner top-right"></div>
+                                <div class="roi-corner bottom-left"></div>
+                                <div class="roi-corner bottom-right"></div>
+                                <div class="laser-beam"></div>
+                                <div class="roi-label">
+                                    <i class="fa-solid fa-expand"></i> PLACE CARD IN CENTER TO SNAP
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 12px;">
+                            <button type="button" class="btn btn-primary" onclick="captureModalPhoto()">
+                                <i class="fa-solid fa-camera-retro"></i> 📸 Snap Photo & Read Text
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PREVIEW & OCR STATUS BANNER (100% FULL CARD IMAGE DISPLAY) -->
+                    <div class="upload-preview-container" id="upload-preview-box" style="display:none;">
+                        <img id="upload-img-preview" src="" alt="Full Card Preview" class="card-img-fit">
+                    </div>
+
+                    <div id="ocr-status-banner" class="ocr-banner" style="display:none;">
+                        <i class="fa-solid fa-robot fa-spin text-highlight"></i> Reading text & auto-filling stats from photo...
+                    </div>
+
+                    <!-- EXTRACTED RAW TEXT DISPLAY -->
+                    <div id="ocr-raw-text-box" class="ocr-raw-box" style="display:none;">
+                        <div class="ocr-raw-header">
+                            <span><i class="fa-solid fa-quote-left"></i> Extracted Card Text:</span>
+                        </div>
+                        <div id="ocr-raw-text-content" class="ocr-raw-content"></div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label>Player Name</label>
+                        <input type="text" id="upload-player-name" required placeholder="e.g. Cristiano Ronaldo">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Defense Stat (0-99)</label>
+                            <input type="number" id="upload-def-stat" min="0" max="99" required placeholder="38">
+                        </div>
+                        <div class="form-group">
+                            <label>Attack Stat (0-99)</label>
+                            <input type="number" id="upload-atk-stat" min="0" max="99" required placeholder="94">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Card Number / Code</label>
+                            <input type="text" id="upload-card-num" required placeholder="007">
+                        </div>
+                        <div class="form-group">
+                            <label>Card Type (Any Special Type)</label>
+                            <select id="upload-card-type" onchange="toggleCustomTypeInput(this)">
+                                <option value="Base">Base</option>
+                                <option value="Man of the Match">Man of the Match</option>
+                                <option value="All Action Hero">All Action Hero</option>
+                                <option value="Magic Memories">Magic Memories</option>
+                                <option value="Vintage Vibes">Vintage Vibes</option>
+                                <option value="Cup Champion">Cup Champion</option>
+                                <option value="Chrome">Chrome</option>
+                                <option value="Foil">Foil</option>
+                                <option value="Refractor">Refractor</option>
+                                <option value="Heritage">Heritage</option>
+                                <option value="Autograph">Autograph</option>
+                                <option value="Relic / Patch">Relic / Patch</option>
+                                <option value="CUSTOM">+ Enter Custom Type...</option>
+                            </select>
+                            <input type="text" id="upload-custom-type" placeholder="Type custom name e.g. Gold Prism..." style="display:none; margin-top: 6px;">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="upload-submit-btn">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Save & Auto-Rename to Folder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
