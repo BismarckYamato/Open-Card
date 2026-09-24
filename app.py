@@ -9,8 +9,12 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-CARDS_DIR = os.path.dirname(os.path.abspath(__file__))
-COLLECTION_FILE = os.path.join(CARDS_DIR, "my_collection.json")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CARDS_DIR = os.path.join(BASE_DIR, "catalog")
+COLLECTION_FILE = os.path.join(BASE_DIR, "my_collection.json")
+
+# Ensure catalog directory exists
+os.makedirs(CARDS_DIR, exist_ok=True)
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.webp', '.bmp', '.PNG', '.JPG', '.JPEG'}
 
 # Initialize ORB detector

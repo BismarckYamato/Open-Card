@@ -48,7 +48,7 @@
 
 ## 📋 Card Filename Convention
 
-The master catalog parses filenames using a clean 5-part pipe-delimited format:
+The master catalog (`catalog/`) parses filenames using a clean 5-part pipe-delimited format:
 
 ```text
 Player Name | Defense | Attack | Card Number | Card Type.ext
@@ -118,6 +118,7 @@ Navigate to **[http://localhost:8080](http://localhost:8080)**.
 
 ```text
 Open-Card/
+├── catalog/                   # Master card images catalog (*.png, *.jpg)
 ├── app.py                     # Flask server, OpenCV ORB matching engine & REST APIs
 ├── requirements.txt           # Python package dependencies
 ├── my_collection.json         # User personal collection database (JSON)
@@ -128,7 +129,6 @@ Open-Card/
 │       └── app.js             # Camera management, scanning loop, OCR & UI handlers
 ├── templates/
 │   └── index.html             # Single-page web application UI
-├── *.png / *.jpg              # Sample cards in master catalog
 ├── LICENSE                    # MIT License
 ├── .gitignore                 # Git ignore rules
 └── README.md                  # Project documentation
