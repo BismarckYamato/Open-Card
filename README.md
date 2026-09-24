@@ -114,16 +114,32 @@ Navigate to **[http://localhost:8080](http://localhost:8080)**.
 
 ---
 
+## ⚡ Quick Actions (Makefile)
+
+A `Makefile` is included for common everyday tasks:
+
+| Command | Description |
+| :--- | :--- |
+| `make` / `make help` | Show help menu of all available targets |
+| `make install` | Install dependencies and sync virtual environment using `uv` |
+| `make run` / `make dev` | Start the Flask application server (`http://localhost:8080`) |
+| `make test` | Run the full test suite with verbose output |
+| `make lock` | Update dependencies and refresh `uv.lock` |
+| `make catalog-count` | Print total card images currently in `catalog/` |
+| `make clean` | Clean up `__pycache__`, compiled bytecode, and `.DS_Store` |
+
+---
+
 ## 🧪 Running Tests
 
 A comprehensive unit and integration test suite is included in `tests/test_app.py`, validating filename parsing, catalog indexing, image serving, collection operations, and the OpenCV scanning engine:
 
 ```bash
-# Run all tests using uv:
-uv run python -m unittest discover tests -v
+# Run tests via Makefile:
+make test
 
-# Or using standard python:
-python -m unittest discover tests -v
+# Or using uv directly:
+uv run python -m unittest discover tests -v
 ```
 
 ---
@@ -136,6 +152,7 @@ Open-Card/
 ├── tests/
 │   └── test_app.py            # Unit & integration test suite
 ├── app.py                     # Flask server, OpenCV ORB matching engine & REST APIs
+├── Makefile                   # Quick developer actions (make run, test, install, clean)
 ├── pyproject.toml             # Modern project metadata & dependencies (PEP 621)
 ├── uv.lock                    # Cross-platform deterministic dependency lockfile
 ├── requirements.txt           # Pip-compatible package requirements
