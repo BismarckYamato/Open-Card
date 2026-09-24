@@ -73,13 +73,15 @@ git clone https://github.com/BismarckYamato/Open-Card.git
 cd Open-Card
 ```
 
-### 2. Set Up Virtual Environment & Dependencies
+### 2. Set Up & Run
 
-**Using `uv` (Fastest & Recommended):**
+**Using `uv` (Recommended):**
 ```bash
-uv venv
-source .venv/bin/activate    # On Windows: .venv\Scripts\activate
-uv pip install -r requirements.txt
+# Sync dependencies automatically (creates .venv and installs from uv.lock)
+uv sync
+
+# Launch the application
+uv run app.py
 ```
 
 **Or using standard `venv` & `pip`:**
@@ -87,11 +89,6 @@ uv pip install -r requirements.txt
 python3 -m venv .venv
 source .venv/bin/activate    # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-### 4. Run the Application
-
-```bash
 python app.py
 ```
 
@@ -122,7 +119,10 @@ Navigate to **[http://localhost:8080](http://localhost:8080)**.
 A comprehensive unit and integration test suite is included in `tests/test_app.py`, validating filename parsing, catalog indexing, image serving, collection operations, and the OpenCV scanning engine:
 
 ```bash
-# Run all tests using Python's built-in unittest
+# Run all tests using uv:
+uv run python -m unittest discover tests -v
+
+# Or using standard python:
 python -m unittest discover tests -v
 ```
 
@@ -136,7 +136,9 @@ Open-Card/
 ├── tests/
 │   └── test_app.py            # Unit & integration test suite
 ├── app.py                     # Flask server, OpenCV ORB matching engine & REST APIs
-├── requirements.txt           # Python package dependencies
+├── pyproject.toml             # Modern project metadata & dependencies (PEP 621)
+├── uv.lock                    # Cross-platform deterministic dependency lockfile
+├── requirements.txt           # Pip-compatible package requirements
 ├── my_collection.json         # User personal collection database (JSON)
 ├── static/
 │   ├── css/
