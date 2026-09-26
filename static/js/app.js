@@ -11,6 +11,7 @@ let isScanningInFlight = false;
 let uploadSourceMode = 'file';
 let modalCameraStream = null;
 let capturedCameraSnapshot = null;
+let loadedUrlImage = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initCameraList();
@@ -483,10 +484,13 @@ function openUploadModal() {
 function closeUploadModal() {
     document.getElementById('upload-modal').classList.remove('open');
     document.getElementById('upload-form').reset();
+    const urlInput = document.getElementById('upload-url-input');
+    if (urlInput) urlInput.value = '';
     document.getElementById('upload-preview-box').style.display = 'none';
     document.getElementById('ocr-status-banner').style.display = 'none';
     document.getElementById('ocr-raw-text-box').style.display = 'none';
     capturedCameraSnapshot = null;
+    loadedUrlImage = null;
     stopModalCamera();
 }
 
@@ -494,14 +498,83 @@ function switchUploadSource(source) {
     uploadSourceMode = source;
     document.getElementById('tab-src-file').classList.toggle('active', source === 'file');
     document.getElementById('tab-src-camera').classList.toggle('active', source === 'camera');
+    const tabUrl = document.getElementById('tab-src-url');
+    if (tabUrl) tabUrl.classList.toggle('active', source === 'url');
     
     document.getElementById('src-file-box').style.display = source === 'file' ? 'block' : 'none';
     document.getElementById('src-camera-box').style.display = source === 'camera' ? 'block' : 'none';
+    const boxUrl = document.getElementById('src-url-box');
+    if (boxUrl) boxUrl.style.display = source === 'url' ? 'block' : 'none';
     
     if (source === 'camera') {
         startModalCamera();
     } else {
         stopModalCamera();
+    }
+}
+
+// FETCH IMAGE FROM URL & RUN OCR TEXT FINDER
+async function fetchCardFromUrl() {
+    const urlInput = document.getElementById('upload-url-input');
+    const fetchBtn = document.getElementById('btn-fetch-url');
+    const banner = document.getElementById('ocr-status-banner');
+    const url = urlInput ? urlInput.value.trim() : '';
+
+    if (!url) {
+        alert("Please enter a card image URL (e.g. https://.../card.png)");
+        if (urlInput) urlInput.focus();
+        return;
+    }
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        alert("Image URL must start with http:// or https://");
+        if (urlInput) urlInput.focus();
+        return;
+    }
+
+    if (fetchBtn) {
+        fetchBtn.disabled = true;
+        fetchBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Loading...`;
+    }
+
+    banner.style.display = 'block';
+    banner.innerHTML = `<i class="fa-solid fa-cloud-arrow-down fa-spin text-highlight"></i> Fetching image from URL...`;
+
+    try {
+        const response = await fetch('/api/fetch_image_url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: url })
+        });
+        const data = await response.json();
+
+        if (data.success && data.data_uri) {
+            loadedUrlImage = data.data_uri;
+            
+            // Show preview
+            const previewBox = document.getElementById('upload-preview-box');
+            const previewImg = document.getElementById('upload-img-preview');
+            previewImg.src = data.data_uri;
+            previewBox.style.display = 'block';
+
+            // Run OCR text finder on the fetched image!
+            banner.innerHTML = `<i class="fa-solid fa-robot fa-spin text-highlight"></i> Image loaded! Running text finder & auto-filling stats...`;
+            await runOCR(data.data_uri);
+        } else {
+            loadedUrlImage = null;
+            banner.innerHTML = `<span class="text-danger"><i class="fa-solid fa-triangle-exclamation"></i> ${data.error || 'Failed to fetch image from URL'}</span>`;
+            alert(`Could not load image: ${data.error || 'Invalid or unreachable URL'}`);
+        }
+    } catch (err) {
+        console.error("fetchCardFromUrl error:", err);
+        loadedUrlImage = null;
+        banner.innerHTML = `<span class="text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Network error loading image from URL.</span>`;
+        alert(`Error fetching image from URL: ${err.message}`);
+    } finally {
+        if (fetchBtn) {
+            fetchBtn.disabled = false;
+            fetchBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-down"></i> Load & Read Text`;
+        }
     }
 }
 
@@ -692,6 +765,18 @@ function toggleCustomTypeInput(select) {
     }
 }
 
+function dataURItoBlob(dataURI) {
+    const parts = dataURI.split(',');
+    const mime = parts[0].split(':')[1].split(';')[0];
+    const byteString = atob(parts[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mime });
+}
+
 async function handleCardUpload(e) {
     e.preventDefault();
     
@@ -718,20 +803,50 @@ async function handleCardUpload(e) {
     if (uploadSourceMode === 'file') {
         const fileInput = document.getElementById('upload-file-input');
         if (!fileInput.files || !fileInput.files[0]) {
-            alert("Please choose a file or switch to 'Take Photo' mode!");
+            alert("Please choose a file or switch to another mode!");
             submitBtn.disabled = false;
             submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save & Auto-Rename to Folder`;
             return;
         }
         formData.append('file', fileInput.files[0]);
-    } else {
+    } else if (uploadSourceMode === 'camera') {
         if (!capturedCameraSnapshot) {
             alert("Please click '📸 Snap Photo' first!");
             submitBtn.disabled = false;
             submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save & Auto-Rename to Folder`;
             return;
         }
-        formData.append('camera_image', capturedCameraSnapshot);
+        try {
+            const blob = dataURItoBlob(capturedCameraSnapshot);
+            formData.append('file', blob, 'camera_snapshot.jpg');
+        } catch {
+            formData.append('camera_image', capturedCameraSnapshot);
+        }
+    } else if (uploadSourceMode === 'url') {
+        if (!loadedUrlImage) {
+            const urlInput = document.getElementById('upload-url-input');
+            const url = urlInput ? urlInput.value.trim() : '';
+            if (url) {
+                await fetchCardFromUrl();
+            }
+            if (!loadedUrlImage) {
+                alert("Please enter a valid image URL and click 'Load & Read Text' first!");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save & Auto-Rename to Folder`;
+                return;
+            }
+        }
+        try {
+            const blob = dataURItoBlob(loadedUrlImage);
+            const ext = blob.type === 'image/png' ? '.png' : (blob.type === 'image/webp' ? '.webp' : '.jpg');
+            formData.append('file', blob, `url_image${ext}`);
+        } catch {
+            formData.append('camera_image', loadedUrlImage);
+        }
+        const urlInput = document.getElementById('upload-url-input');
+        if (urlInput && urlInput.value.trim()) {
+            formData.append('image_url', urlInput.value.trim());
+        }
     }
     
     try {
@@ -740,18 +855,28 @@ async function handleCardUpload(e) {
             body: formData
         });
         
-        const data = await res.json();
+        let data;
+        try {
+            data = await res.json();
+        } catch {
+            if (res.status === 413) {
+                throw new Error("Image payload too large for server (Max 50MB).");
+            } else {
+                throw new Error(`Server returned HTTP error ${res.status}`);
+            }
+        }
+        
         if (data.success) {
             closeUploadModal();
             fetchMasterCatalog();
             switchTab('catalog');
             alert(`Success! '${playerName}' (${cardType}) added to catalog!`);
         } else {
-            alert(`Upload Error: ${data.error}`);
+            alert(`Upload Error: ${data.error || 'Failed to save card'}`);
         }
     } catch (err) {
         console.error("Upload error:", err);
-        alert("Upload failed. Please check file format.");
+        alert(`Upload error: ${err.message || 'Please check image URL or file format.'}`);
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save & Auto-Rename to Folder`;

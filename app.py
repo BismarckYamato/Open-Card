@@ -3,11 +3,17 @@ import re
 import cv2
 import json
 import base64
+import urllib.request
+import urllib.parse
 import numpy as np
 from datetime import datetime
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, Request, jsonify, send_from_directory
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+
+# Allow large high-resolution card uploads and base64 snapshots (up to 50MB)
+Request.max_form_memory_size = 50 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARDS_DIR = os.path.join(BASE_DIR, "catalog")
@@ -150,11 +156,76 @@ def get_catalog():
         })
     return jsonify({"success": True, "catalog": catalog_list, "total": len(catalog_list)})
 
+@app.route('/api/fetch_image_url', methods=['POST'])
+def fetch_image_url():
+    """
+    Fetches an image from a remote URL server-side (bypassing browser CORS).
+    Validates that the content is an image and returns a base64 data URI with metadata.
+    """
+    data = request.json or {}
+    url = data.get('url', '').strip()
+    
+    if not url:
+        return jsonify({"success": False, "error": "No URL provided"}), 400
+        
+    if not (url.startswith('http://') or url.startswith('https://')):
+        return jsonify({"success": False, "error": "Invalid URL scheme. Must start with http:// or https://"}), 400
+        
+    try:
+        req = urllib.request.Request(
+            url,
+            headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'
+            }
+        )
+        with urllib.request.urlopen(req, timeout=12) as response:
+            content_type = response.headers.get('Content-Type', '').lower()
+            img_bytes = response.read(25 * 1024 * 1024) # max 25MB
+            
+            nparr = np.frombuffer(img_bytes, np.uint8)
+            decoded = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            if decoded is None:
+                return jsonify({"success": False, "error": "URL does not point to a valid decodable image"}), 400
+                
+            # Determine extension and mime type
+            ext = ".jpg"
+            mime = "image/jpeg"
+            if "png" in content_type:
+                ext = ".png"
+                mime = "image/png"
+            elif "webp" in content_type:
+                ext = ".webp"
+                mime = "image/webp"
+            elif "jpeg" in content_type or "jpg" in content_type:
+                ext = ".jpg"
+                mime = "image/jpeg"
+            else:
+                parsed_path = urllib.parse.urlparse(url).path
+                url_ext = os.path.splitext(parsed_path)[1].lower()
+                if url_ext in ALLOWED_EXTENSIONS:
+                    ext = url_ext
+                    mime = "image/png" if ext == ".png" else "image/webp" if ext == ".webp" else "image/jpeg"
+
+            b64_str = base64.b64encode(img_bytes).decode('utf-8')
+            data_uri = f"data:{mime};base64,{b64_str}"
+            
+            return jsonify({
+                "success": True,
+                "data_uri": data_uri,
+                "ext": ext,
+                "mime": mime,
+                "width": decoded.shape[1],
+                "height": decoded.shape[0]
+            })
+    except Exception as e:
+        return jsonify({"success": False, "error": f"Failed to fetch image from URL: {str(e)}"}), 400
+
 @app.route('/api/catalog/upload', methods=['POST'])
 def upload_card():
     """
     Uploads or captures a new card image into the master catalog.
-    Supports file uploads OR base64 camera snapshots.
+    Supports file uploads, base64 camera snapshots/images, OR direct remote image URLs.
     Formats filename cleanly: Player Name | Def | Attack | Card Num | Card Type.ext
     """
     player_name = request.form.get('player_name', '').strip() or "Unknown Player"
@@ -172,11 +243,11 @@ def upload_card():
     card_type = request.form.get('card_type', '').strip() or "Base"
     
     camera_data = request.form.get('camera_image')
+    image_url = request.form.get('image_url', '').strip()
     ext = ".jpg"
     
     # Construct target filename
     new_filename = f"{player_name} | {def_stat} | {attack_stat} | {card_num} | {card_type}"
-    
     save_path = ""
     
     if 'file' in request.files and request.files['file'].filename != '':
@@ -192,16 +263,49 @@ def upload_card():
     elif camera_data:
         try:
             if ',' in camera_data:
+                header = camera_data.split(',')[0].lower()
+                if 'image/png' in header:
+                    ext = '.png'
+                elif 'image/webp' in header:
+                    ext = '.webp'
+                elif 'image/jpeg' in header or 'image/jpg' in header:
+                    ext = '.jpg'
                 camera_data = camera_data.split(',')[1]
             img_bytes = base64.b64decode(camera_data)
-            full_filename = f"{new_filename}.jpg"
+            full_filename = f"{new_filename}{ext}"
             save_path = os.path.join(CARDS_DIR, full_filename)
             with open(save_path, 'wb') as f:
                 f.write(img_bytes)
         except Exception as e:
-            return jsonify({"success": False, "error": f"Failed to save camera snapshot: {str(e)}"}), 500
+            return jsonify({"success": False, "error": f"Failed to save image: {str(e)}"}), 500
+            
+    elif image_url:
+        try:
+            req = urllib.request.Request(
+                image_url,
+                headers={'User-Agent': 'Mozilla/5.0 ...', 'Accept': 'image/*'}
+            )
+            with urllib.request.urlopen(req, timeout=12) as response:
+                content_type = response.headers.get('Content-Type', '').lower()
+                img_bytes = response.read(25 * 1024 * 1024)
+                if 'png' in content_type:
+                    ext = '.png'
+                elif 'webp' in content_type:
+                    ext = '.webp'
+                else:
+                    parsed_path = urllib.parse.urlparse(image_url).path
+                    url_ext = os.path.splitext(parsed_path)[1].lower()
+                    if url_ext in ALLOWED_EXTENSIONS:
+                        ext = url_ext
+                        
+                full_filename = f"{new_filename}{ext}"
+                save_path = os.path.join(CARDS_DIR, full_filename)
+                with open(save_path, 'wb') as f:
+                    f.write(img_bytes)
+        except Exception as e:
+            return jsonify({"success": False, "error": f"Failed to download image from URL: {str(e)}"}), 500
     else:
-        return jsonify({"success": False, "error": "No file or camera snapshot provided"}), 400
+        return jsonify({"success": False, "error": "No file, camera snapshot, or image URL provided"}), 400
         
     index_card_images() # Re-index immediately
     parsed_stats = parse_card_filename(full_filename)
@@ -413,4 +517,4 @@ if __name__ == '__main__':
     print(" Football Card Master Catalog & Collection Tracker")
     print(" Access UI at: http://localhost:8080")
     print("=====================================================")
-    app.run(host='127.0.0.1', port=8080, debug=False)
+    app.run(host='127.0.0.1', port=8080, debug=True)

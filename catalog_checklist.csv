@@ -1,0 +1,469 @@
+Card #,Name,Team,Card Type
+1,Team Badge,Tottenham Hotspur,Base
+2,Guglielmo Vicario,Tottenham Hotspur,Base
+3,Micky van de Ven,Tottenham Hotspur,Base
+4,Cristian Romero,Tottenham Hotspur,Base
+5,Destiny Udogie,Tottenham Hotspur,Base
+6,James Maddison,Tottenham Hotspur,Base
+7,Son Heung-Min,Tottenham Hotspur,Base
+8,Brennan Johnson,Tottenham Hotspur,Base
+9,Dominic Solanke,Tottenham Hotspur,Base
+10,Team Badge,Liverpool,Base
+11,Alisson Becker,Liverpool,Base
+12,Virgil van Dijk,Liverpool,Base
+13,Ibrahima Konaté,Liverpool,Base
+14,Jeremie Frimpong,Liverpool,Base
+15,Andy Robertson,Liverpool,Base
+16,Milos Kerkez,Liverpool,Base
+17,Conor Bradley,Liverpool,Base
+18,Joe Gomez,Liverpool,Base
+19,Dominik Szoboszlai,Liverpool,Base
+20,Alexis Mac Allister,Liverpool,Base
+21,Ryan Gravenberch,Liverpool,Base
+22,Florian Wirtz,Liverpool,Base
+23,Curtis Jones,Liverpool,Base
+24,Wataru Endo,Liverpool,Base
+25,Luis Díaz,Liverpool,Base
+26,Mohamed Salah,Liverpool,Base
+27,Cody Gakpo,Liverpool,Base
+28,Team Badge,Arsenal,Base
+29,David Raya,Arsenal,Base
+30,William Saliba,Arsenal,Base
+31,Ben White,Arsenal,Base
+32,Gabriel,Arsenal,Base
+33,Riccardo Calafiori,Arsenal,Base
+34,Jurrién Timber,Arsenal,Base
+35,Myles Lewis-Skelly,Arsenal,Base
+36,Martín Zubimendi,Arsenal,Base
+37,Martin Ødegaard,Arsenal,Base
+38,Declan Rice,Arsenal,Base
+39,Mikel Merino,Arsenal,Base
+40,Ethan Nwaneri,Arsenal,Base
+41,Kai Havertz,Arsenal,Base
+42,Bukayo Saka,Arsenal,Base
+43,Leandro Trossard,Arsenal,Base
+44,Gabriel Martinelli,Arsenal,Base
+45,Noni Madueke,Arsenal,Base
+46,Team Badge,Manchester City,Base
+47,Ederson,Manchester City,Base
+48,Rúben Dias,Manchester City,Base
+49,John Stones,Manchester City,Base
+50,Joško Gvardiol,Manchester City,Base
+51,Manuel Akanji,Manchester City,Base
+52,Nathan Aké,Manchester City,Base
+53,Abdukodir Khusanov,Manchester City,Base
+54,Vitor Reis,Manchester City,Base
+55,Bernardo Silva,Manchester City,Base
+56,Claudio Echeverri,Manchester City,Base
+57,Phil Foden,Manchester City,Base
+58,Rodri,Manchester City,Base
+59,Nico González,Manchester City,Base
+60,Jérémy Doku,Manchester City,Base
+61,Sávio,Manchester City,Base
+62,Omar Marmoush,Manchester City,Base
+63,Erling Haaland,Manchester City,Base
+64,Team Badge,Chelsea,Base
+65,Robert Sánchez,Chelsea,Base
+66,Reece James,Chelsea,Base
+67,Tosin Adarabioyo,Chelsea,Base
+68,Enzo Fernández,Chelsea,Base
+69,Moisés Caicedo,Chelsea,Base
+70,Estêvão,Chelsea,Base
+71,Liam Delap,Chelsea,Base
+72,Cole Palmer,Chelsea,Base
+73,Team Badge,Newcastle United,Base
+74,Nick Pope,Newcastle United,Base
+75,Lewis Hall,Newcastle United,Base
+76,Dan Burn,Newcastle United,Base
+77,Bruno Guimarães,Newcastle United,Base
+78,Sandro Tonali,Newcastle United,Base
+79,Joelinton,Newcastle United,Base
+80,Alexander Isak,Newcastle United,Base
+81,Anthony Gordon,Newcastle United,Base
+82,Team Badge,Aston Villa,Base
+83,Emiliano Martínez,Aston Villa,Base
+84,Ezri Konsa,Aston Villa,Base
+85,Pau Torres,Aston Villa,Base
+86,John McGinn,Aston Villa,Base
+87,Youri Tielemans,Aston Villa,Base
+88,Morgan Rogers,Aston Villa,Base
+89,Ollie Watkins,Aston Villa,Base
+90,Donyell Malen,Aston Villa,Base
+91,Team Badge,Nottingham Forest,Base
+92,Matz Sels,Nottingham Forest,Base
+93,Nikola Milenković,Nottingham Forest,Base
+94,Murillo,Nottingham Forest,Base
+95,Ola Aina,Nottingham Forest,Base
+96,Morgan Gibbs-White,Nottingham Forest,Base
+97,Ryan Yates,Nottingham Forest,Base
+98,Chris Wood,Nottingham Forest,Base
+99,Callum Hudson-Odoi,Nottingham Forest,Base
+100,Team Badge,FC Barcelona,Base
+101,Iñigo Martínez,FC Barcelona,Base
+102,Ronald Araújo,FC Barcelona,Base
+103,Jules Koundé,FC Barcelona,Base
+104,Pau Cubarsí,FC Barcelona,Base
+105,Alejandro Balde,FC Barcelona,Base
+106,Marc Bernal,FC Barcelona,Base
+107,Frenkie de Jong,FC Barcelona,Base
+108,Fermín López,FC Barcelona,Base
+109,Pedri,FC Barcelona,Base
+110,Gavi,FC Barcelona,Base
+111,Marc Casadó,FC Barcelona,Base
+112,Dani Olmo,FC Barcelona,Base
+113,Lamine Yamal,FC Barcelona,Base
+114,Robert Lewandowski,FC Barcelona,Base
+115,Ferran Torres,FC Barcelona,Base
+116,Pau Victor,FC Barcelona,Base
+117,Raphinha,FC Barcelona,Base
+118,Team Badge,Real Madrid CF,Base
+119,Thibaut Courtois,Real Madrid CF,Base
+120,Antonio Rüdiger,Real Madrid CF,Base
+121,Éder Militão,Real Madrid CF,Base
+122,Daniel Carvajal,Real Madrid CF,Base
+123,Trent Alexander-Arnold,Real Madrid CF,Base
+124,Ferland Mendy,Real Madrid CF,Base
+125,Dean Huijsen,Real Madrid CF,Base
+126,David Alaba,Real Madrid CF,Base
+127,Aurélien Tchouaméni,Real Madrid CF,Base
+128,Eduardo Camavinga,Real Madrid CF,Base
+129,Federico Valverde,Real Madrid CF,Base
+130,Jude Bellingham,Real Madrid CF,Base
+131,Arda Güler,Real Madrid CF,Base
+132,Kylian Mbappé,Real Madrid CF,Base
+133,Rodrygo,Real Madrid CF,Base
+134,Endrick,Real Madrid CF,Base
+135,Vini Jr.,Real Madrid CF,Base
+136,Team Badge,Atlético de Madrid,Base
+137,Jan Oblak,Atlético de Madrid,Base
+138,José María Giménez,Atlético de Madrid,Base
+139,Koke,Atlético de Madrid,Base
+140,Conor Gallagher,Atlético de Madrid,Base
+141,Pablo Barrios,Atlético de Madrid,Base
+142,Marcos Llorente,Atlético de Madrid,Base
+143,Antoine Griezmann,Atlético de Madrid,Base
+144,Julián Alvarez,Atlético de Madrid,Base
+145,Team Badge,VfB Stuttgart,Base
+146,Alexander Nübel,VfB Stuttgart,Base
+147,Josha Vagnoman,VfB Stuttgart,Base
+148,Maximilian Mittelstádt,VfB Stuttgart,Base
+149,Jeff Chabot,VfB Stuttgart,Base
+150,Atakan Karazor,VfB Stuttgart,Base
+151,Angelo Stiller,VfB Stuttgart,Base
+152,Deniz Undav,VfB Stuttgart,Base
+153,Ermedin Demirović,VfB Stuttgart,Base
+154,Team Badge,FC Bayern München,Base
+155,Manuel Neuer,FC Bayern München,Base
+156,Josip Stanišić,FC Bayern München,Base
+157,Kim Min-Jae,FC Bayern München,Base
+158,Alphonso Davies,FC Bayern München,Base
+159,Dayot Upamecano,FC Bayern München,Base
+160,Raphaël Guerreiro,FC Bayern München,Base
+161,Jonathan Tah,FC Bayern München,Base
+162,Hiroki Ito,FC Bayern München,Base
+163,Joshua Kimmich,FC Bayern München,Base
+164,João Palhinha,FC Bayern München,Base
+165,Konrad Laimer,FC Bayern München,Base
+166,Aleksandar Pavlović,FC Bayern München,Base
+167,Leon Goretzka,FC Bayern München,Base
+168,Michael Olise,FC Bayern München,Base
+169,Jamal Musiala,FC Bayern München,Base
+170,Serge Gnabry,FC Bayern München,Base
+171,Harry Kane,FC Bayern München,Base
+172,Team Badge,Bayer 04 Leverkusen,Base
+173,Lukas Hradecky,Bayer 04 Leverkusen,Base
+174,Alejandro Grimaldo,Bayer 04 Leverkusen,Base
+175,Piero Hincapié,Bayer 04 Leverkusen,Base
+176,Robert Andrich,Bayer 04 Leverkusen,Base
+177,Exequiel Palacios,Bayer 04 Leverkusen,Base
+178,Granit Xhaka,Bayer 04 Leverkusen,Base
+179,Aleix García,Bayer 04 Leverkusen,Base
+180,Patrik Schick,Bayer 04 Leverkusen,Base
+181,Team Badge,Eintracht Frankfurt,Base
+182,Kevin Trapp,Eintracht Frankfurt,Base
+183,Robin Koch,Eintracht Frankfurt,Base
+184,Rasmus Kristensen,Eintracht Frankfurt,Base
+185,Arthur Theate,Eintracht Frankfurt,Base
+186,Mario Götze,Eintracht Frankfurt,Base
+187,Hugo Larsson,Eintracht Frankfurt,Base
+188,Ellyes Skhiri,Eintracht Frankfurt,Base
+189,Hugo Ekitike,Eintracht Frankfurt,Base
+190,Team Badge,Borussia Dortmund,Base
+191,Gregor Kobel,Borussia Dortmund,Base
+192,Nico Schlotterbeck,Borussia Dortmund,Base
+193,Waldemar Anton,Borussia Dortmund,Base
+194,Marcel Sabitzer,Borussia Dortmund,Base
+195,Emre Can,Borussia Dortmund,Base
+196,Julian Brandt,Borussia Dortmund,Base
+197,Maximilian Beier,Borussia Dortmund,Base
+198,Serhou Guirassy,Borussia Dortmund,Base
+199,Team Badge,Sporting Clube de Portugal,Base
+200,Ousmane Diomande,Sporting Clube de Portugal,Base
+201,Zeno Debast,Sporting Clube de Portugal,Base
+202,Gonçalo Inácio,Sporting Clube de Portugal,Base
+203,Morten Hjulmand,Sporting Clube de Portugal,Base
+204,Pedro Gonçalves,Sporting Clube de Portugal,Base
+205,Viktor Gyökeres,Sporting Clube de Portugal,Base
+206,Francisco Trincão,Sporting Clube de Portugal,Base
+207,Geovany Quenda,Sporting Clube de Portugal,Base
+208,Team Badge,SL Benfica,Base
+209,Antonio Silva,SL Benfica,Base
+210,Nicolas Otamendi,SL Benfica,Base
+211,Gianluca Prestianni,SL Benfica,Base
+212,Fredrik Aursnes,SL Benfica,Base
+213,Florentino,SL Benfica,Base
+214,Andreas Schjelderup,SL Benfica,Base
+215,Kerem Aktürkoğlu,SL Benfica,Base
+216,Vangelis Pavlidis,SL Benfica,Base
+217,Team Badge,AFC Ajax,Base
+218,Remko Pasveer,AFC Ajax,Base
+219,Jorrel Hato,AFC Ajax,Base
+220,Youri Baas,AFC Ajax,Base
+221,Youri Regeer,AFC Ajax,Base
+222,Davy Klaassen,AFC Ajax,Base
+223,Kenneth Taylor,AFC Ajax,Base
+224,Brian Brobbey,AFC Ajax,Base
+225,Mika Godts,AFC Ajax,Base
+226,Team Badge,Paris Saint-Germain,Base
+227,Gianluigi Donnarumma,Paris Saint-Germain,Base
+228,Marquinhos,Paris Saint-Germain,Base
+229,Willian Pacho,Paris Saint-Germain,Base
+230,Nuno Mendes,Paris Saint-Germain,Base
+231,Lucas Beraldo,Paris Saint-Germain,Base
+232,Achraf Hakimi,Paris Saint-Germain,Base
+233,Lucas Hernández,Paris Saint-Germain,Base
+234,João Neves,Paris Saint-Germain,Base
+235,Warren Zaïre-Emery,Paris Saint-Germain,Base
+236,Vitinha,Paris Saint-Germain,Base
+237,Fabián Ruiz,Paris Saint-Germain,Base
+238,Lee Kang-In,Paris Saint-Germain,Base
+239,Désiré Doué,Paris Saint-Germain,Base
+240,Bradley Barcola,Paris Saint-Germain,Base
+241,Khvicha Kvaratskhelia,Paris Saint-Germain,Base
+242,Ousmane Dembélé,Paris Saint-Germain,Base
+243,Gonçalo Ramos,Paris Saint-Germain,Base
+244,Team Badge,SSC Napoli,Base
+245,Alex Meret,SSC Napoli,Base
+246,Giovanni Di Lorenzo,SSC Napoli,Base
+247,Alessandro Buongiorno,SSC Napoli,Base
+248,Billy Gilmour,SSC Napoli,Base
+249,André-Frank Zambo Anguissa,SSC Napoli,Base
+250,Scott McTominay,SSC Napoli,Base
+251,Romelu Lukaku,SSC Napoli,Base
+252,Matteo Politano,SSC Napoli,Base
+253,Team Badge,FC Internazionale Milano,Base
+254,Yann Sommer,FC Internazionale Milano,Base
+255,Alessandro Bastoni,FC Internazionale Milano,Base
+256,Federico Dimarco,FC Internazionale Milano,Base
+257,Denzel Dumfries,FC Internazionale Milano,Base
+258,Nicolò Barella,FC Internazionale Milano,Base
+259,Hakan Çalhanoğlu,FC Internazionale Milano,Base
+260,Lautaro Martínez,FC Internazionale Milano,Base
+261,Marcus Thuram,FC Internazionale Milano,Base
+262,Team Badge,Juventus,Base
+263,Michele Di Gregorio,Juventus,Base
+264,Pierre Kalulu,Juventus,Base
+265,Andrea Cambiaso,Juventus,Base
+266,Manuel Locatelli,Juventus,Base
+267,Teun Koopmeiners,Juventus,Base
+268,Weston McKennie,Juventus,Base
+269,Khéphren Thuram,Juventus,Base
+270,Kenan Yildiz,Juventus,Base
+271,Team Badge,Bologna FC 1909,Base
+272,Łukasz Skorupski,Bologna FC 1909,Base
+273,Juan Miranda,Bologna FC 1909,Base
+274,Lewis Ferguson,Bologna FC 1909,Base
+275,Remo Freuler,Bologna FC 1909,Base
+276,Jens Odgaard,Bologna FC 1909,Base
+277,Dan Ndoye,Bologna FC 1909,Base
+278,Riccardo Orsolini,Bologna FC 1909,Base
+279,Santiago Castro,Bologna FC 1909,Base
+280,Team Badge,ACF Fiorentina,Base
+281,David De Gea,ACF Fiorentina,Base
+282,Luca Ranieri,ACF Fiorentina,Base
+283,Dodô,ACF Fiorentina,Base
+284,Pietro Comuzzo,ACF Fiorentina,Base
+285,Rolando Mandragora,ACF Fiorentina,Base
+286,Nicolò Fagioli,ACF Fiorentina,Base
+287,Cher Ndour,ACF Fiorentina,Base
+288,Moise Kean,ACF Fiorentina,Base
+289,Team Badge,FC Salzburg,Base
+290,Alexander Schlager,FC Salzburg,Base
+291,Samson Baidoo,FC Salzburg,Base
+292,Aleksa Terzic,FC Salzburg,Base
+293,Mads Bidstrup,FC Salzburg,Base
+294,Oscar Gloukh,FC Salzburg,Base
+295,Bobby Clark,FC Salzburg,Base
+296,Dorgeles Nene,FC Salzburg,Base
+297,Karim Konate,FC Salzburg,Base
+298,Team Badge,Celtic FC,Base
+299,Kasper Schmeichel,Celtic FC,Base
+300,Cameron Carter-Vickers,Celtic FC,Base
+301,Callum McGregor,Celtic FC,Base
+302,Daizen Maeda,Celtic FC,Base
+303,Team Badge,Athletic Club,Base
+304,Unai Simón,Athletic Club,Base
+305,Daniel Vivian,Athletic Club,Base
+306,Iñaki Williams,Athletic Club,Base
+307,Team Badge,Rangers FC,Base
+308,Jack Butland,Rangers FC,Base
+309,James Tavernier,Rangers FC,Base
+310,Robin Pröpper,Rangers FC,Base
+311,Nedim Bajrami,Rangers FC,Base
+312,Team Badge,FC Porto,Base
+313,Diogo Costa,FC Porto,Base
+314,Alan Varela,FC Porto,Base
+315,Samu Aghehowa,FC Porto,Base
+316,Jeremie Frimpong,Liverpool,Man of the Match Wildcard
+317,William Saliba,Arsenal,Man of the Match Wildcard
+318,Joško Gvardiol,Manchester City,Man of the Match Wildcard
+319,Reece James,Chelsea,Man of the Match Wildcard
+320,Dan Burn,Newcastle United,Man of the Match Wildcard
+321,Pau Torres,Aston Villa,Man of the Match Wildcard
+322,Elliot Anderson,Nottingham Forest,Man of the Match Wildcard
+323,Pedro Porro,Tottenham Hotspur,Man of the Match Wildcard
+324,Pedri,FC Barcelona,Man of the Match Wildcard
+325,Jude Bellingham,Real Madrid CF,Man of the Match Wildcard
+326,José María Giménez,Atlético de Madrid,Man of the Match Wildcard
+327,Oihan Sancet,Athletic Club,Man of the Match Wildcard
+328,Gorka Guruzeta,Athletic Club,Man of the Match Wildcard
+329,Alphonso Davies,FC Bayern München,Man of the Match Wildcard
+330,Alejandro Grimaldo,Bayer 04 Leverkusen,Man of the Match Wildcard
+331,Emre Can,Borussia Dortmund,Man of the Match Wildcard
+332,Nuno Mendes,Paris Saint-Germain,Man of the Match Wildcard
+333,Zeno Debast,Sporting Clube de Portugal,Man of the Match Wildcard
+334,João Mário,Juventus,Man of the Match Wildcard
+335,Youri Baas,AFC Ajax,Man of the Match Wildcard
+336,David Neres,SSC Napoli,Man of the Match Wildcard
+337,Federico Dimarco,FC Internazionale Milano,Man of the Match Wildcard
+338,Michele Di Gregorio,Juventus,Man of the Match Wildcard
+339,Juan Miranda,Bologna FC 1909,Man of the Match Wildcard
+340,Dodô,ACF Fiorentina,Man of the Match Wildcard
+341,Arthur Theate,Eintracht Frankfurt,Man of the Match Wildcard
+342,Cyriel Dessers,Rangers FC,Man of the Match Wildcard
+343,Virgil van Dijk,Liverpool,Cup Champion
+344,Xabi Alonso,Liverpool,Cup Champion
+345,Rúben Dias,Manchester City,Cup Champion
+346,Ashley Cole,Arsenal,Cup Champion
+347,Frank Lampard,Chelsea,Cup Champion
+348,Fernando Torres,Chelsea,Cup Champion
+349,Xavi Hernández,FC Barcelona,Cup Champion
+350,Andrés Iniesta,FC Barcelona,Cup Champion
+351,Lionel Messi,FC Barcelona,Cup Champion
+352,Daniel Carvajal,Real Madrid CF,Cup Champion
+353,Toni Kroos,Real Madrid CF,Cup Champion
+354,Raúl,Real Madrid CF,Cup Champion
+355,Diego Godín,Atlético de Madrid,Cup Champion
+356,Antoine Griezmann,Atlético de Madrid,Cup Champion
+357,Manuel Neuer,FC Bayern München,Cup Champion
+358,Bastian Schweinsteiger,FC Bayern München,Cup Champion
+359,Samuel Eto'o,FC Internazionale Milano,Cup Champion
+360,Alessandro Del Piero,Juventus,Cup Champion
+361,Ryan Gravenberch,Liverpool,All-Action Hero
+362,Mikel Merino,Arsenal,All-Action Hero
+363,Rodri,Manchester City,All-Action Hero
+364,Tosin Adarabioyo,Chelsea,All-Action Hero
+365,Chris Wood,Nottingham Forest,All-Action Hero
+366,Brennan Johnson,Tottenham Hotspur,All-Action Hero
+367,Frenkie de Jong,FC Barcelona,All-Action Hero
+368,Koke,Atlético de Madrid,All-Action Hero
+369,Iñaki Williams,Athletic Club,All-Action Hero
+370,Mario Götze,Eintracht Frankfurt,All-Action Hero
+371,Marcel Sabitzer,Borussia Dortmund,All-Action Hero
+372,Vitinha,Paris Saint-Germain,All-Action Hero
+373,Gonçalo Inácio,Sporting Clube de Portugal,All-Action Hero
+374,Kenneth Taylor,AFC Ajax,All-Action Hero
+375,Weston McKennie,Juventus,All-Action Hero
+376,Riccardo Orsolini,Bologna FC 1909,All-Action Hero
+377,Daizen Maeda,Celtic FC,All-Action Hero
+378,Mohamed Diomande,Rangers FC,All-Action Hero
+379,Ibrahima Konaté,Liverpool,Heritage
+380,Nicolas Jackson,Chelsea,Heritage
+381,Donyell Malen,Aston Villa,Heritage
+382,Micky van de Ven,Tottenham Hotspur,Heritage
+383,Dani Olmo,FC Barcelona,Heritage
+384,Aurélien Tchouaméni,Real Madrid CF,Heritage
+385,Pepê,FC Porto,Heritage
+386,Alessandro Buongiorno,SSC Napoli,Heritage
+387,Andrea Cambiaso,Juventus,Heritage
+388,David Raya,Arsenal,Heritage
+389,Jan Oblak,Atlético de Madrid,Heritage
+390,Unai Simón,Athletic Club,Heritage
+391,Kevin Trapp,Eintracht Frankfurt,Heritage
+392,Gregor Kobel,Borussia Dortmund,Heritage
+393,Gianluigi Donnarumma,Paris Saint-Germain,Heritage
+394,Yann Sommer,FC Internazionale Milano,Heritage
+395,Manuel Neuer,FC Bayern München,Heritage
+396,Kasper Schmeichel,Celtic FC,Heritage
+397,Bruno Guimarães,Newcastle United,Heritage
+398,Ryan Yates,Nottingham Forest,Heritage
+399,Atakan Karazor,VfB Stuttgart,Heritage
+400,Morten Hjulmand,Sporting Clube de Portugal,Heritage
+401,Bernardo Silva,Manchester City,Heritage
+402,Lewis Ferguson,Bologna FC 1909,Heritage
+403,Luca Ranieri,ACF Fiorentina,Heritage
+404,Mads Bidstrup,FC Salzburg,Heritage
+405,James Tavernier,Rangers FC,Heritage
+406,Harvey Elliott,Liverpool,Counter Attax
+407,Mohamed Salah,Liverpool,Counter Attax
+408,Erling Haaland,Manchester City,Counter Attax
+409,Fernando Torres,Atlético de Madrid,Counter Attax
+410,Ollie Watkins,Aston Villa,Counter Attax
+411,Endrick,Real Madrid CF,Counter Attax
+412,Julián Alvarez,Atlético de Madrid,Counter Attax
+413,Ousmane Dembélé,Paris Saint-Germain,Counter Attax
+414,Weston McKennie,Juventus,Counter Attax
+415,Roberto Firmino,Liverpool,Showboat
+416,Eden Hazard,Chelsea,Showboat
+417,Ronaldinho,FC Barcelona,Showboat
+418,Ronaldo,Real Madrid CF,Showboat
+419,David Villa,Manchester City,Showboat
+420,Franck Ribéry,FC Bayern München,Showboat
+421,Dimitar Berbatov,Tottenham Hotspur,Showboat
+422,Adriano,FC Internazionale Milano,Showboat
+423,Zinedine Zidane,Real Madrid CF,Showboat
+424,Jerzy Dudek,Liverpool,Magic Memories
+425,Rodri,Manchester City,Magic Memories
+426,Didier Drogba,Chelsea,Magic Memories
+427,Morgan Rogers,Aston Villa,Magic Memories
+428,Brennan Johnson,Tottenham Hotspur,Magic Memories
+429,David Villa,Manchester City,Magic Memories
+430,Lionel Messi,FC Barcelona,Magic Memories
+431,Neymar Jr.,Paris Saint-Germain,Magic Memories
+432,Gareth Bale,Real Madrid CF,Magic Memories
+433,Rodrygo,Real Madrid CF,Magic Memories
+434,Antoine Griezmann,Atlético de Madrid,Magic Memories
+435,Joshua Kimmich,FC Bayern München,Magic Memories
+436,Harry Kane,FC Bayern München,Magic Memories
+437,Patrik Schick,Bayer 04 Leverkusen,Magic Memories
+438,Gianluigi Donnarumma,Paris Saint-Germain,Magic Memories
+439,Francesco Acerbi,FC Internazionale Milano,Magic Memories
+440,Shunsuke Nakamura,Celtic FC,Magic Memories
+441,James Tavernier,Rangers FC,Magic Memories
+442,Cody Gakpo,Liverpool,Stealth Strike
+443,Kai Havertz,Arsenal,Stealth Strike
+444,Omar Marmoush,Manchester City,Stealth Strike
+445,Cole Palmer,Chelsea,Stealth Strike
+446,Anthony Gordon,Newcastle United,Stealth Strike
+447,Dominic Solanke,Tottenham Hotspur,Stealth Strike
+448,Lamine Yamal,FC Barcelona,Stealth Strike
+449,Vini Jr.,Real Madrid CF,Stealth Strike
+450,Antoine Griezmann,Atlético de Madrid,Stealth Strike
+451,Nico Williams,Athletic Club,Stealth Strike
+452,Michael Olise,FC Bayern München,Stealth Strike
+453,Deniz Undav,VfB Stuttgart,Stealth Strike
+454,Bradley Barcola,Paris Saint-Germain,Stealth Strike
+455,Romelu Lukaku,SSC Napoli,Stealth Strike
+456,Denzel Dumfries,FC Internazionale Milano,Stealth Strike
+457,Moise Kean,ACF Fiorentina,Stealth Strike
+458,Samu Aghehowa,FC Porto,Stealth Strike
+459,Conrad Harder,Sporting Clube de Portugal,Stealth Strike
+460,Gianluigi Donnarumma,Paris Saint-Germain,100 Club
+461,Trent Alexander-Arnold,Real Madrid CF,100 Club
+462,Denzel Dumfries,FC Internazionale Milano,100 Club
+463,Declan Rice,Arsenal,100 Club
+464,Pedri,FC Barcelona,100 Club
+465,João Neves,Paris Saint-Germain,100 Club
+466,Mohamed Salah,Liverpool,100 Club
+467,Raphinha,FC Barcelona,100 Club
+468,Ousmane Dembélé,Paris Saint-Germain,100 Club / Unbeatable 101

@@ -186,5 +186,69 @@ class TestOpenCard(unittest.TestCase):
         self.assertEqual(data["card"]["filename"], sample_card["filename"])
         self.assertGreaterEqual(data["confidence"], 50)
 
+    # ==========================================
+    # 6. Fetch Image URL & Upload Tests
+    # ==========================================
+    def test_fetch_image_url_validation(self):
+        # Empty URL
+        res = self.client.post('/api/fetch_image_url', json={"url": ""})
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(res.get_json()["success"])
+
+        # Invalid scheme
+        res2 = self.client.post('/api/fetch_image_url', json={"url": "ftp://example.com/card.png"})
+        self.assertEqual(res2.status_code, 400)
+        self.assertIn("Invalid URL scheme", res2.get_json()["error"])
+
+    def test_fetch_image_url_success(self):
+        from unittest.mock import patch, MagicMock
+
+        test_img = np.zeros((80, 80, 3), dtype=np.uint8)
+        _, buffer = cv2.imencode('.png', test_img)
+        img_bytes = buffer.tobytes()
+
+        mock_resp = MagicMock()
+        mock_resp.headers.get.return_value = 'image/png'
+        mock_resp.read.return_value = img_bytes
+        mock_resp.__enter__.return_value = mock_resp
+
+        with patch('urllib.request.urlopen', return_value=mock_resp):
+            res = self.client.post('/api/fetch_image_url', json={"url": "https://example.com/card.png"})
+            self.assertEqual(res.status_code, 200)
+            data = res.get_json()
+            self.assertTrue(data["success"])
+            self.assertEqual(data["ext"], ".png")
+            self.assertEqual(data["width"], 80)
+            self.assertEqual(data["height"], 80)
+            self.assertTrue(data["data_uri"].startswith("data:image/png;base64,"))
+
+    def test_upload_card_with_base64_data_uri(self):
+        # Create a small valid test image in memory
+        test_img = np.zeros((100, 100, 3), dtype=np.uint8)
+        _, buffer = cv2.imencode('.png', test_img)
+        b64_str = base64.b64encode(buffer).decode('utf-8')
+        data_uri = f"data:image/png;base64,{b64_str}"
+
+        test_player = "Test URL Player"
+        res = self.client.post('/api/catalog/upload', data={
+            'player_name': test_player,
+            'def_stat': 70,
+            'attack_stat': 85,
+            'card_num': '999',
+            'card_type': 'Base',
+            'camera_image': data_uri
+        })
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertTrue(data["success"])
+        expected_filename = "Test URL Player | 70 | 85 | 999 | Base.png"
+        self.assertEqual(data["filename"], expected_filename)
+
+        # Verify file exists in catalog/ and clean it up
+        target_path = os.path.join(app.CARDS_DIR, expected_filename)
+        self.assertTrue(os.path.exists(target_path))
+        os.remove(target_path)
+        app.index_card_images()
+
 if __name__ == '__main__':
     unittest.main()
